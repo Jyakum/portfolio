@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0e14">
+<meta name="description" content="LEE JAE CHUL — AI Engineer | Multi-agent system design & orchestration">
+<title>LEE JAE CHUL · AI Engineer Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Reset / Base ---------- */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    background: radial-gradient(ellipse at top, #0f1620 0%, #0a0e14 60%, #06090e 100%);
+    color: #c9d1d9;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  ::selection { background: #00ff9c33; color: #fff; }
+
+  /* ---------- Color tokens ---------- */
+  :root {
+    --bg: #0a0e14;
+    --card: #11161d;
+    --card-hover: #161c25;
+    --border: #1f2630;
+    --text: #c9d1d9;
+    --text-dim: #7d8590;
+    --accent-green: #00ff9c;
+    --accent-cyan: #00d4ff;
+    --accent-amber: #ffb454;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  /* ---------- Layout ---------- */
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 1.25rem 1.25rem 4rem;
+  }
+
+  /* ---------- Top bar (lang toggle) ---------- */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 14, 20, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.6rem 1.25rem;
+  }
+  .topbar-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .brand {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--accent-green);
+    font-weight: 500;
+  }
+  .brand::before {
+    content: '$ ';
+    color: var(--text-dim);
+  }
+  .lang-toggle {
+    display: flex;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .lang-toggle button {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 32px;
+    min-width: 44px;
+  }
+  .lang-toggle button.active {
+    background: var(--accent-green);
+    color: #000;
+  }
+  .lang-toggle button:hover:not(.active) { color: var(--text); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 2.5rem 0 1.5rem;
+  }
+  .hero-prompt {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+  }
+  .hero-prompt::before {
+    content: '$ ';
+    color: var(--accent-green);
+  }
+  .hero-name {
+    font-family: var(--mono);
+    font-size: clamp(1.6rem, 7vw, 2.4rem);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 0.35rem;
+  }
+  .hero-name .arrow {
+    color: var(--accent-green);
+    margin-right: 0.4rem;
+  }
+  .hero-role {
+    font-family: var(--mono);
+    font-size: clamp(0.95rem, 3.8vw, 1.15rem);
+    color: var(--accent-cyan);
+    margin-bottom: 1.25rem;
+  }
+  .hero-role::before {
+    content: '> ';
+    color: var(--text-dim);
+  }
+  .hero-tagline {
+    font-size: clamp(0.95rem, 3.6vw, 1.05rem);
+    color: var(--text);
+    line-height: 1.55;
+    margin-bottom: 1.75rem;
+    padding: 0.85rem 1rem;
+    background: rgba(0, 255, 156, 0.04);
+    border-left: 2px solid var(--accent-green);
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* ---------- CTA buttons ---------- */
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.1rem;
+    border-radius: 8px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    min-height: 44px;
+    border: 1px solid var(--border);
+  }
+  .cta-primary {
+    background: var(--accent-green);
+    color: #000;
+    border-color: var(--accent-green);
+  }
+  .cta-primary:hover {
+    background: #33ffae;
+    transform: translateY(-1px);
+  }
+  .cta-secondary {
+    background: var(--card);
+    color: var(--text);
+  }
+  .cta-secondary:hover {
+    background: var(--card-hover);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+  }
+
+  /* ---------- Section ---------- */
+  section { margin-bottom: 2.75rem; }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .section-label::before {
+    content: '// ';
+    color: var(--accent-green);
+  }
+  h2 {
+    font-family: var(--mono);
+    font-size: clamp(1.2rem, 4.5vw, 1.5rem);
+    color: #fff;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  /* ---------- Tech Stack ---------- */
+  .stack {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem;
+  }
+  .stack-row { margin-bottom: 0.75rem; }
+  .stack-row:last-child { margin-bottom: 0; }
+  .stack-label {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--accent-amber);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  .stack-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .chip {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    background: rgba(0, 212, 255, 0.08);
+    color: var(--accent-cyan);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 4px;
+  }
+  .chip.dim {
+    background: rgba(125, 133, 144, 0.08);
+    color: var(--text-dim);
+    border-color: rgba(125, 133, 144, 0.2);
+  }
+
+  /* ---------- Project Card ---------- */
+  .project {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+    transition: border-color 0.2s;
+  }
+  .project:hover { border-color: rgba(0, 255, 156, 0.3); }
+  .project-header { margin-bottom: 1rem; }
+  .project-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent-green);
+    background: rgba(0, 255, 156, 0.1);
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.04em;
+  }
+  .project-title {
+    font-family: var(--mono);
+    font-size: clamp(1.05rem, 4vw, 1.25rem);
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    line-height: 1.3;
+  }
+  .project-meta {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+  }
+  .project-role {
+    font-size: 0.85rem;
+    color: var(--accent-cyan);
+    margin-bottom: 0.75rem;
+  }
+  .project-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .paar { margin-top: 1rem; }
+  .paar-block {
+    margin-bottom: 0.9rem;
+    padding-left: 0.85rem;
+    border-left: 2px solid var(--border);
+  }
+  .paar-block:last-child { margin-bottom: 0; }
+  .paar-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.05em;
+  }
+  .paar-block.problem { border-left-color: #ff6b6b; }
+  .paar-block.problem .paar-label { color: #ff6b6b; }
+  .paar-block.analyze { border-left-color: var(--accent-amber); }
+  .paar-block.analyze .paar-label { color: var(--accent-amber); }
+  .paar-block.action { border-left-color: var(--accent-cyan); }
+  .paar-block.action .paar-label { color: var(--accent-cyan); }
+  .paar-block.result { border-left-color: var(--accent-green); }
+  .paar-block.result .paar-label { color: var(--accent-green); }
+  .paar-content { font-size: 0.9rem; color: var(--text); line-height: 1.6; }
+  .paar-content ul {
+    list-style: none;
+    padding: 0;
+  }
+  .paar-content li {
+    position: relative;
+    padding-left: 1rem;
+    margin-bottom: 0.3rem;
+  }
+  .paar-content li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--text-dim);
+  }
+  .paar-content strong {
+    color: var(--accent-green);
+    font-weight: 600;
+  }
+
+  /* ---------- DAACS Diagram ---------- */
+  .diagram-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 0.5rem;
+    margin: 1.25rem 0;
+    overflow-x: auto;
+  }
+  .diagram-caption {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 0.5rem;
+  }
+  .diagram-svg {
+    width: 100%;
+    min-width: 640px; /* 모바일에서도 라벨 가독성 유지, 부모는 overflow-x:auto */
+    height: auto;
+    display: block;
+  }
+  @media (min-width: 720px) {
+    .diagram-svg { min-width: 0; }
+  }
+
+  /* ---------- About ---------- */
+  .about {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .about p { margin-bottom: 0.6rem; }
+  .about p:last-child { margin-bottom: 0; }
+
+  /* ---------- Contact ---------- */
+  .contact-grid {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    min-height: 44px;
+  }
+  .contact-item:hover {
+    border-color: var(--accent-cyan);
+    background: var(--card-hover);
+  }
+  .contact-key {
+    color: var(--accent-amber);
+    min-width: 70px;
+  }
+  .contact-val { color: var(--text); word-break: break-all; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+  footer .blink {
+    display: inline-block;
+    width: 8px;
+    height: 1em;
+    background: var(--accent-green);
+    vertical-align: middle;
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ---------- Animations ---------- */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (min-width: 768px) {
+    .container { padding: 2rem 2rem 5rem; }
+    .hero { padding: 3.5rem 0 2rem; }
+    .contact-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">jaechul.dev</span>
+    <div class="lang-toggle" role="group" aria-label="Language toggle">
+      <button data-lang="ko" class="active" aria-pressed="true">KO</button>
+      <button data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="hero-prompt" data-i18n="prompt">whoami</div>
+    <h1 class="hero-name"><span class="arrow">&gt;</span>LEE JAE CHUL</h1>
+    <div class="hero-role" data-i18n="role">멀티 에이전트 오케스트레이션 · 프롬프트 엔지니어링</div>
+    <p class="hero-tagline" data-i18n-html="tagline">
+      작동하는 AI가 아니라 <strong style="color:var(--accent-green);">판단하는 AI</strong>를 설계합니다. 1인 기업을 위한 8개 에이전트 기반 AI OS(DAACS OS)를 Rust 타입 시스템과 DAG 기반 오케스트레이션으로 구축 중입니다.
+    </p>
+    <div class="cta-row">
+      <a href="https://github.com/Jyakum" target="_blank" rel="noopener" class="cta cta-primary">
+        <span>→</span> <span data-i18n="cta_github">GitHub</span>
+      </a>
+      <a href="mailto:leejaechul92@gmail.com" class="cta cta-secondary">
+        <span>✉</span> <span data-i18n="cta_email">Email</span>
+      </a>
+      <a href="resume_final.pdf" target="_blank" class="cta cta-secondary">
+        <span>📄</span> <span data-i18n="cta_resume">이력서 PDF</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ============ DAACS DIAGRAM ============ -->
+  <section class="fade-in">
+    <div class="section-label" data-i18n="section_arch">SYSTEM ARCHITECTURE</div>
+    <h2 data-i18n="arch_title">DAACS OS · 8-Agent Orchestration</h2>
+    <div class="diagram-wrap">
+      <svg class="diagram-svg" viewBox="0 0 720 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DAACS OS architecture diagram">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#7d8590"/>
+          </marker>
+          <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#00ff9c"/>
+          </marker>
+          <linearGradient id="orchGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#00ff9c" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#00d4ff" stop-opacity="0.12"/>
+          </linearGradient>
+        </defs>
+
+        <!-- ============ Layer Labels ============ -->
+        <text x="10" y="28" font-family="JetBrains Mono, monospace" font-size="11" fill="#7d8590">// USER INPUT</text>
+        <text x="10" y="128" font-family="JetBrains Mono, monospace" font-size="11" fill="#7d8590">// ORCHESTRATION (DAG)</text>
+        <text x="10" y="250" font-family="JetBrains Mono, monospace" font-size="11" fill="#7d8590">// AGENT POOL (×8)</text>
+        <text x="10" y="478" font-family="JetBrains Mono, monospace" font-size="11" fill="#7d8590">// PERSISTENCE &amp; TOOLS</text>
+
+        <!-- ============ USER INPUT box (center-x = 360) ============ -->
+        <!-- box: x=270, y=40, w=180 → cx=360, bottom=84 -->
+        <rect x="270" y="40" width="180" height="44" rx="8" fill="#11161d" stroke="#1f2630" stroke-width="1.2"/>
+        <text x="360" y="67" font-family="JetBrains Mono, monospace" font-size="13" fill="#fff" text-anchor="middle">User Prompt / Task</text>
+
+        <!-- Arrow 1: USER → ORCHESTRATOR (cx=360, y=86 → y=138; orchestrator top = 140) -->
+        <line x1="360" y1="86" x2="360" y2="138" stroke="#00ff9c" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+        <!-- ============ ORCHESTRATOR box ============ -->
+        <!-- box: x=180, y=140, w=360, h=64 → cx=360, bottom=204 -->
+        <rect x="180" y="140" width="360" height="64" rx="10" fill="url(#orchGrad)" stroke="#00ff9c" stroke-width="1.5"/>
+        <text x="360" y="168" font-family="JetBrains Mono, monospace" font-size="14" font-weight="700" fill="#00ff9c" text-anchor="middle">Rust Orchestrator</text>
+        <text x="360" y="190" font-family="JetBrains Mono, monospace" font-size="11" fill="#c9d1d9" text-anchor="middle">DAG scheduler · typed message bus</text>
+
+        <!-- Arrow 2: ORCHESTRATOR → AGENT POOL (cx=360, y=206 → y=256; pool top = 260) -->
+        <line x1="360" y1="206" x2="360" y2="256" stroke="#00ff9c" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+        <text x="372" y="234" font-family="JetBrains Mono, monospace" font-size="10" fill="#00ff9c" font-style="italic">dispatch</text>
+
+        <!-- ============ AGENT POOL container (dashed border) ============ -->
+        <!-- container: x=20, y=260, w=680, h=180 → bottom=440 -->
+        <rect x="20" y="260" width="680" height="180" rx="10" fill="rgba(0,212,255,0.025)" stroke="#1f2630" stroke-width="1.2" stroke-dasharray="6 4"/>
+        <text x="35" y="280" font-family="JetBrains Mono, monospace" font-size="10" fill="#7d8590" font-style="italic">× 8 specialized agents · dispatched in parallel via DAG</text>
+
+        <!-- ============ 8 Agent boxes (4×2 grid, each 140×46) ============ -->
+        <!-- x positions: 50, 210, 370, 530 (centers: 120, 280, 440, 600) -->
+        <!-- Row 1 y=290 (center=313), Row 2 y=360 (center=383) -->
+        <g font-family="JetBrains Mono, monospace" font-size="11" fill="#c9d1d9" text-anchor="middle">
+          <!-- Row 1 -->
+          <rect x="50"  y="290" width="140" height="46" rx="6" fill="#161c25" stroke="#1f2630"/>
+          <text x="120" y="310" fill="#00d4ff" font-weight="700">CRM</text>
+          <text x="120" y="326">Agent</text>
+
+          <rect x="210" y="290" width="140" height="46" rx="6" fill="#161c25" stroke="#1f2630"/>
+          <text x="280" y="310" fill="#00d4ff" font-weight="700">Schedule</text>
+          <text x="280" y="326">Agent</text>
+
+          <rect x="370" y="290" width="140" height="46" rx="6" fill="#161c25" stroke="#1f2630"/>
+          <text x="440" y="310" fill="#00d4ff" font-weight="700">Accounting</text>
+          <text x="440" y="326">Agent</text>
+
+          <rect x="530" y="290" width="140" height="46" rx="6" fill="#161c25" stroke="#1f2630"/>
+          <text x="600" y="310" fill="#00d4ff" font-weight="700">Email</text>
+          <text x="600" y="326">Agent</text>
+
+          <!-- Row 2 -->
+          <rect x="50"  y="360" width="140" height="46" rx="6" fill="#161c25" stroke="#1f2630"/>
+          <text x="120" y="380" fill="#00d4ff" font-weight="700">Document</text>
+          <text x="120" y="396">Agent</text>
+
+          <rect x="210" y="360" width="140" height="46" rx="6" fill="#161c25" stroke="#1f2630"/>
+          <text x="280" y="380" fill="#00d4ff" font-weight="700">Marketing</text>
+          <text x="280" y="396">Agent</text>
+
+          <rect x="370" y="360" width="140" height="46" rx="6" fill="#161c25" stroke="#1f2630"/>
+          <text x="440" y="380" fill="#00d4ff" font-weight="700">Analytics</text>
+          <text x="440" y="396">Agent</text>
+
+          <rect x="530" y="360" width="140" height="46" rx="6" fill="#161c25" stroke="#1f2630"/>
+          <text x="600" y="380" fill="#00d4ff" font-weight="700">Task</text>
+          <text x="600" y="396">Agent</text>
+        </g>
+
+        <!-- ============ Arrows: AGENT POOL → PERSISTENCE (dashed) ============ -->
+        <!-- pool bottom=440; SQLite top=490, MCP top=490 -->
+        <!-- SQLite cx=215 → arrow (215, 444) → (215, 488) -->
+        <!-- MCP cx=505 → arrow (505, 444) → (505, 488) -->
+        <g stroke="#7d8590" stroke-width="1.2" fill="none" marker-end="url(#arrow)" stroke-dasharray="4 3">
+          <line x1="215" y1="444" x2="215" y2="488"/>
+          <line x1="505" y1="444" x2="505" y2="488"/>
+        </g>
+        <text x="225" y="470" font-family="JetBrains Mono, monospace" font-size="9" fill="#7d8590" font-style="italic">read/write</text>
+        <text x="515" y="470" font-family="JetBrains Mono, monospace" font-size="9" fill="#7d8590" font-style="italic">tool call</text>
+
+        <!-- ============ Persistence layer (SQLite + MCP) ============ -->
+        <!-- SQLite: x=80, y=490, w=270, h=54 → cx=215, top=490 -->
+        <rect x="80" y="490" width="270" height="54" rx="8" fill="#11161d" stroke="#ffb454" stroke-width="1.2"/>
+        <text x="215" y="514" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="#ffb454" text-anchor="middle">SQLite (local-first)</text>
+        <text x="215" y="532" font-family="JetBrains Mono, monospace" font-size="10" fill="#7d8590" text-anchor="middle">vector embeddings · state · history</text>
+
+        <!-- MCP: x=370, y=490, w=270, h=54 → cx=505, top=490 -->
+        <rect x="370" y="490" width="270" height="54" rx="8" fill="#11161d" stroke="#00d4ff" stroke-width="1.2"/>
+        <text x="505" y="514" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="#00d4ff" text-anchor="middle">MCP Tools</text>
+        <text x="505" y="532" font-family="JetBrains Mono, monospace" font-size="10" fill="#7d8590" text-anchor="middle">external integrations</text>
+      </svg>
+      <div class="diagram-caption" data-i18n="diagram_caption">DAG-based orchestration · typed message bus · local-first persistence</div>
+    </div>
+  </section>
+
+  <!-- ============ TECH STACK ============ -->
+  <section class="fade-in">
+    <div class="section-label" data-i18n="section_stack">TECH STACK</div>
+    <div class="stack">
+      <div class="stack-row">
+        <div class="stack-label">// LLM Engineering</div>
+        <div class="stack-chips">
+          <span class="chip">LangGraph</span>
+          <span class="chip">LangChain</span>
+          <span class="chip">RAG</span>
+          <span class="chip">MCP</span>
+          <span class="chip">Prompt Engineering</span>
+          <span class="chip">LangSmith</span>
+        </div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">// Multi-Agent Systems</div>
+        <div class="stack-chips">
+          <span class="chip">DAG 오케스트레이션</span>
+          <span class="chip">State Machine</span>
+          <span class="chip">Agent Message Schema</span>
+        </div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">// Backend</div>
+        <div class="stack-chips">
+          <span class="chip">Rust</span>
+          <span class="chip">Axum</span>
+          <span class="chip">Python</span>
+          <span class="chip">FastAPI</span>
+        </div>
+      </div>
+      <div class="stack-row">
+        <div class="stack-label">// FE / DB / Tools</div>
+        <div class="stack-chips">
+          <span class="chip dim">React</span>
+          <span class="chip dim">Vite</span>
+          <span class="chip dim">PostgreSQL</span>
+          <span class="chip dim">SQLite</span>
+          <span class="chip dim">Socket.IO</span>
+          <span class="chip dim">Git</span>
+          <span class="chip dim">PyTorch</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECT 1: DAACS OS ============ -->
+  <section class="fade-in">
+    <div class="section-label" data-i18n="section_projects">PROJECTS</div>
+
+    <div class="project">
+      <div class="project-header">
+        <span class="project-tag" data-i18n="p1_tag">진행중 · IN PROGRESS</span>
+        <h3 class="project-title" data-i18n="p1_title">DAACS OS — 1인 기업을 위한 AI 통합 운영체제</h3>
+        <div class="project-meta" data-i18n="p1_meta">2026.03 ~ Present · 5인 팀 프로젝트</div>
+        <div class="project-role" data-i18n="p1_role">Backend & AI Orchestration 담당</div>
+        <div class="project-stack">
+          <span class="chip">Rust</span>
+          <span class="chip">Axum</span>
+          <span class="chip">React</span>
+          <span class="chip">SQLite</span>
+          <span class="chip">MCP</span>
+        </div>
+      </div>
+
+      <div class="paar">
+        <div class="paar-block problem">
+          <div class="paar-label">[ PROBLEM ]</div>
+          <div class="paar-content" data-i18n="p1_problem">
+            1인 기업이 CRM, 회계, 일정 등 여러 SaaS를 개별 운영하는 비효율과 클라우드 의존에 따른 비용·보안 문제를 해결하기 위해, AI 에이전트 기반 통합 운영체제가 필요했다.
+          </div>
+        </div>
+        <div class="paar-block analyze">
+          <div class="paar-label">[ ANALYZE ]</div>
+          <div class="paar-content">
+            <ul data-i18n-html="p1_analyze">
+              <li>단일 LLM 프롬프트 vs DAG 기반 멀티 에이전트</li>
+              <li>클라우드 LLM API vs 로컬 우선 + 선택적 클라우드</li>
+              <li>LangGraph 그대로 사용 vs Rust 타입 시스템으로 직접 구현</li>
+            </ul>
+          </div>
+        </div>
+        <div class="paar-block action">
+          <div class="paar-label">[ ACTION ]</div>
+          <div class="paar-content">
+            <ul data-i18n-html="p1_action">
+              <li>8개 특화 에이전트를 DAG 기반으로 오케스트레이션</li>
+              <li>Rust 타입 시스템으로 에이전트 간 메시지 스키마를 컴파일 타임에 검증</li>
+              <li>SQLite 기반 로컬 우선 아키텍처 (벡터 임베딩도 로컬)</li>
+              <li>트레이드오프: 복잡도 ↑ vs 상태 제어 안정성 ↑ → 후자 선택</li>
+            </ul>
+          </div>
+        </div>
+        <div class="paar-block result">
+          <div class="paar-label">[ RESULT & 회고 ]</div>
+          <div class="paar-content">
+            <ul data-i18n-html="p1_result">
+              <li>단일 프롬프트 방식 대비 <strong>평균 태스크 처리 시간 30% 단축</strong></li>
+              <li>Rust의 소유권 모델이 멀티 에이전트 동시성 제어에서 효과적이었으며, 타입 안전성으로 에이전트 간 통신 버그를 <strong>컴파일 타임에 차단</strong></li>
+              <li>MCP 적용으로 외부 툴 연동 확장성 확보</li>
+              <li><em style="color:var(--text-dim);">→ 향후: 로컬 임베딩 모델 통합으로 완전한 오프라인 동작 강화</em></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PROJECT 2 ============ -->
+    <div class="project">
+      <div class="project-header">
+        <span class="project-tag" data-i18n="p2_tag">완료 · SHIPPED</span>
+        <h3 class="project-title" data-i18n="p2_title">AI 사회자 기반 논리 토론 플랫폼</h3>
+        <div class="project-meta" data-i18n="p2_meta">2025.12 ~ 2026.01 · 5인 팀 프로젝트</div>
+        <div class="project-role" data-i18n="p2_role">LangGraph 설계 & Prompt Engineering (기여도 40%)</div>
+        <div class="project-stack">
+          <span class="chip">FastAPI</span>
+          <span class="chip">Python</span>
+          <span class="chip">LangGraph</span>
+          <span class="chip">RAG</span>
+          <span class="chip">React</span>
+          <span class="chip">PostgreSQL</span>
+          <span class="chip">Socket.IO</span>
+        </div>
+      </div>
+
+      <div class="paar">
+        <div class="paar-block problem">
+          <div class="paar-label">[ PROBLEM ]</div>
+          <div class="paar-content" data-i18n="p2_problem">
+            학생 대상 토론에서 발생하는 감정적 논쟁, 주제 이탈, 공정하지 못한 평가 문제. AI 사회자가 초·중·고 수준별로 적절한 톤·어휘로 실시간 피드백을 줘야 함.
+          </div>
+        </div>
+        <div class="paar-block analyze">
+          <div class="paar-label">[ ANALYZE ]</div>
+          <div class="paar-content">
+            <ul data-i18n-html="p2_analyze">
+              <li>프롬프트 하드코딩 vs JSON 외부 관리</li>
+              <li>동적·정적 프롬프트 분리 여부</li>
+              <li>실시간 스트리밍 시 hallucination 통제 방법</li>
+            </ul>
+          </div>
+        </div>
+        <div class="paar-block action">
+          <div class="paar-label">[ ACTION ]</div>
+          <div class="paar-content">
+            <ul data-i18n-html="p2_action">
+              <li>토론 흐름을 LangGraph 노드 단위로 설계, 각 노드의 역할을 프롬프트로 주입</li>
+              <li>동적·정적 프롬프트 분리 + JSON 외부 관리로 hallucination 감소</li>
+              <li>LangSmith로 LLM 추적·테스트</li>
+              <li>Socket.IO 기반 실시간 스트리밍 최적화</li>
+            </ul>
+          </div>
+        </div>
+        <div class="paar-block result">
+          <div class="paar-label">[ RESULT & 회고 ]</div>
+          <div class="paar-content">
+            <ul data-i18n-html="p2_result">
+              <li><strong>욕설 탐지 정확도 90%</strong> 달성</li>
+              <li>실시간 스트리밍 환경에서 사용자 인지 지연(Latency) <strong>2~4초</strong>로 통제</li>
+              <li>프롬프트를 JSON으로 외부 분리한 것이 <strong>팀원 간 역할 분담과 빠른 실험 반복</strong>에 효과적</li>
+              <li><em style="color:var(--text-dim);">→ 향후: 실시간 소켓 통신과 LLM 응답 스트리밍 간 타이밍 제어 심화 학습</em></li>
+            </ul>
+            <div style="margin-top:0.75rem;">
+              <a href="https://github.com/Jyakum/ai-debate-feedback" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:0.8rem;color:var(--accent-cyan);text-decoration:none;">→ github.com/Jyakum/ai-debate-feedback</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="fade-in">
+    <div class="section-label" data-i18n="section_about">ABOUT</div>
+    <div class="about">
+      <p data-i18n="about_p1">말레이시아 유학과 해병대 통번역, 비IT 도메인 경력을 거쳐 AI 엔지니어로 전환 중입니다.</p>
+      <p data-i18n="about_p2">"왜 이 기술인가?"를 끊임없이 묻는 근거 기반 의사결정을 지향합니다. 멀티 에이전트 시스템과 오케스트레이션이 현재의 학습·실험 분야입니다.</p>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="fade-in">
+    <div class="section-label" data-i18n="section_contact">CONTACT</div>
+    <div class="contact-grid">
+      <a href="mailto:leejaechul92@gmail.com" class="contact-item">
+        <span class="contact-key">email:</span>
+        <span class="contact-val">leejaechul92@gmail.com</span>
+      </a>
+      <a href="https://github.com/Jyakum" target="_blank" rel="noopener" class="contact-item">
+        <span class="contact-key">github:</span>
+        <span class="contact-val">@Jyakum</span>
+      </a>
+      <a href="tel:+821086853635" class="contact-item">
+        <span class="contact-key">phone:</span>
+        <span class="contact-val">010-8685-3635</span>
+      </a>
+      <div class="contact-item" style="cursor:default;">
+        <span class="contact-key">location:</span>
+        <span class="contact-val" data-i18n="loc">경기도 안양시</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>$ exit 0<span class="blink"></span></div>
+    <div style="margin-top:0.4rem;">© 2026 LEE JAE CHUL · Built with vibe code</div>
+  </footer>
+</div>
+
+<script>
+  // ---------- i18n dictionaries ----------
+  const i18n = {
+    ko: {
+      prompt: 'whoami',
+      role: '멀티 에이전트 오케스트레이션 · 프롬프트 엔지니어링',
+      tagline: '작동하는 AI가 아니라 <strong style="color:var(--accent-green);">판단하는 AI</strong>를 설계합니다. 1인 기업을 위한 8개 에이전트 기반 AI OS(DAACS OS)를 Rust 타입 시스템과 DAG 기반 오케스트레이션으로 구축 중입니다.',
+      cta_github: 'GitHub',
+      cta_email: 'Email',
+      cta_resume: '이력서 PDF',
+      section_arch: 'SYSTEM ARCHITECTURE',
+      arch_title: 'DAACS OS · 8-Agent Orchestration',
+      diagram_caption: 'DAG 기반 오케스트레이션 · 타입 안전 메시지 버스 · 로컬 우선 저장소',
+      section_stack: 'TECH STACK',
+      section_projects: 'PROJECTS',
+
+      p1_tag: '진행중 · IN PROGRESS',
+      p1_title: 'DAACS OS — 1인 기업을 위한 AI 통합 운영체제',
+      p1_meta: '2026.03 ~ Present · 5인 팀 프로젝트',
+      p1_role: 'Backend & AI Orchestration 담당',
+      p1_problem: '1인 기업이 CRM, 회계, 일정 등 여러 SaaS를 개별 운영하는 비효율과 클라우드 의존에 따른 비용·보안 문제를 해결하기 위해, AI 에이전트 기반 통합 운영체제가 필요했다.',
+      p1_analyze: '<li>단일 LLM 프롬프트 vs DAG 기반 멀티 에이전트</li><li>클라우드 LLM API vs 로컬 우선 + 선택적 클라우드</li><li>LangGraph 그대로 사용 vs Rust 타입 시스템으로 직접 구현</li>',
+      p1_action: '<li>8개 특화 에이전트를 DAG 기반으로 오케스트레이션</li><li>Rust 타입 시스템으로 에이전트 간 메시지 스키마를 컴파일 타임에 검증</li><li>SQLite 기반 로컬 우선 아키텍처 (벡터 임베딩도 로컬)</li><li>트레이드오프: 복잡도 ↑ vs 상태 제어 안정성 ↑ → 후자 선택</li>',
+      p1_result: '<li>단일 프롬프트 방식 대비 <strong>평균 태스크 처리 시간 30% 단축</strong></li><li>Rust의 소유권 모델이 멀티 에이전트 동시성 제어에서 효과적이었으며, 타입 안전성으로 에이전트 간 통신 버그를 <strong>컴파일 타임에 차단</strong></li><li>MCP 적용으로 외부 툴 연동 확장성 확보</li><li><em style="color:var(--text-dim);">→ 향후: 로컬 임베딩 모델 통합으로 완전한 오프라인 동작 강화</em></li>',
+
+      p2_tag: '완료 · SHIPPED',
+      p2_title: 'AI 사회자 기반 논리 토론 플랫폼',
+      p2_meta: '2025.12 ~ 2026.01 · 5인 팀 프로젝트',
+      p2_role: 'LangGraph 설계 & Prompt Engineering (기여도 40%)',
+      p2_problem: '학생 대상 토론에서 발생하는 감정적 논쟁, 주제 이탈, 공정하지 못한 평가 문제. AI 사회자가 초·중·고 수준별로 적절한 톤·어휘로 실시간 피드백을 줘야 함.',
+      p2_analyze: '<li>프롬프트 하드코딩 vs JSON 외부 관리</li><li>동적·정적 프롬프트 분리 여부</li><li>실시간 스트리밍 시 hallucination 통제 방법</li>',
+      p2_action: '<li>토론 흐름을 LangGraph 노드 단위로 설계, 각 노드의 역할을 프롬프트로 주입</li><li>동적·정적 프롬프트 분리 + JSON 외부 관리로 hallucination 감소</li><li>LangSmith로 LLM 추적·테스트</li><li>Socket.IO 기반 실시간 스트리밍 최적화</li>',
+      p2_result: '<li><strong>욕설 탐지 정확도 90%</strong> 달성</li><li>실시간 스트리밍 환경에서 사용자 인지 지연(Latency) <strong>2~4초</strong>로 통제</li><li>프롬프트를 JSON으로 외부 분리한 것이 <strong>팀원 간 역할 분담과 빠른 실험 반복</strong>에 효과적</li><li><em style="color:var(--text-dim);">→ 향후: 실시간 소켓 통신과 LLM 응답 스트리밍 간 타이밍 제어 심화 학습</em></li>',
+
+      section_about: 'ABOUT',
+      about_p1: '말레이시아 유학과 해병대 통번역, 비IT 도메인 경력을 거쳐 AI 엔지니어로 전환 중입니다.',
+      about_p2: '"왜 이 기술인가?"를 끊임없이 묻는 근거 기반 의사결정을 지향합니다. 멀티 에이전트 시스템과 오케스트레이션이 현재의 학습·실험 분야입니다.',
+      section_contact: 'CONTACT',
+      loc: '경기도 안양시'
+    },
+    en: {
+      prompt: 'whoami',
+      role: 'Multi-Agent Orchestration · Prompt Engineering',
+      tagline: 'Designing AI that <strong style="color:var(--accent-green);">judges, not just executes</strong>. Currently building DAACS OS — an 8-agent AI operating system for solopreneurs — through Rust\'s type system and DAG-based orchestration.',
+      cta_github: 'GitHub',
+      cta_email: 'Email',
+      cta_resume: 'Resume PDF',
+      section_arch: 'SYSTEM ARCHITECTURE',
+      arch_title: 'DAACS OS · 8-Agent Orchestration',
+      diagram_caption: 'DAG-based orchestration · typed message bus · local-first persistence',
+      section_stack: 'TECH STACK',
+      section_projects: 'PROJECTS',
+
+      p1_tag: 'IN PROGRESS',
+      p1_title: 'DAACS OS — All-in-one AI OS for Solopreneurs',
+      p1_meta: 'Mar 2026 ~ Present · Team of 5',
+      p1_role: 'Backend & AI Orchestration Lead',
+      p1_problem: 'Solopreneurs juggle multiple SaaS tools (CRM, accounting, scheduling) inefficiently and face cost / security concerns from cloud dependency. An AI-agent-based integrated OS was needed.',
+      p1_analyze: '<li>Single LLM prompt vs DAG-based multi-agent system</li><li>Cloud LLM API vs local-first with selective cloud fallback</li><li>Use LangGraph as-is vs build orchestration in Rust\'s type system</li>',
+      p1_action: '<li>Orchestrated 8 specialized agents as a DAG</li><li>Enforced inter-agent message schemas at compile time using Rust\'s type system</li><li>Adopted SQLite-based local-first architecture (vector embeddings local too)</li><li>Trade-off: ↑ complexity vs ↑ deterministic state control → chose the latter</li>',
+      p1_result: '<li><strong>30% reduction in average task processing time</strong> vs single-prompt baseline</li><li>Rust\'s ownership model was effective for multi-agent concurrency; type safety caught inter-agent communication bugs <strong>at compile time</strong></li><li>Extensible external-tool integration via MCP</li><li><em style="color:var(--text-dim);">→ Next: integrate local embedding models for fully offline operation</em></li>',
+
+      p2_tag: 'SHIPPED',
+      p2_title: 'AI-Moderated Logical Debate Platform',
+      p2_meta: 'Dec 2025 ~ Jan 2026 · Team of 5',
+      p2_role: 'LangGraph Design & Prompt Engineering (40% contribution)',
+      p2_problem: 'Student debates often suffer from emotional arguments, topic drift, and unfair evaluation. An AI moderator had to provide real-time feedback with tone/vocabulary tuned per education level (elementary/middle/high).',
+      p2_analyze: '<li>Hardcoded prompts vs JSON-based external management</li><li>Whether to separate dynamic and static prompts</li><li>Strategies to suppress hallucination during real-time streaming</li>',
+      p2_action: '<li>Designed debate flow as LangGraph nodes; injected each node\'s role as a prompt</li><li>Separated dynamic/static prompts and managed them in JSON to reduce hallucination</li><li>Tracked and tested LLMs with LangSmith</li><li>Optimized real-time streaming with Socket.IO</li>',
+      p2_result: '<li><strong>90% accuracy in profanity detection</strong></li><li>Perceived latency kept within <strong>2–4 seconds</strong> in real-time streaming</li><li>Externalizing prompts as JSON enabled <strong>clear team role division and fast experimentation</strong></li><li><em style="color:var(--text-dim);">→ Next: deeper study on timing control between socket comms and LLM streaming</em></li>',
+
+      section_about: 'ABOUT',
+      about_p1: 'Transitioning into AI engineering after a non-traditional path: study in Malaysia, Marine Corps interpretation, and several non-IT domains.',
+      about_p2: 'I keep asking "why this tech?" — and let evidence drive the answer. Multi-agent systems and orchestration are my current learning and experimentation focus.',
+      section_contact: 'CONTACT',
+      loc: 'Anyang, Gyeonggi-do, South Korea'
+    }
+  };
+
+  function setLang(lang) {
+    document.documentElement.lang = lang;
+    const dict = i18n[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('.lang-toggle button').forEach(b => {
+      const isActive = b.dataset.lang === lang;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+    try { localStorage.setItem('portfolio-lang', lang); } catch(e) {}
+  }
+
+  document.querySelectorAll('.lang-toggle button').forEach(b => {
+    b.addEventListener('click', () => setLang(b.dataset.lang));
+  });
+
+  // Restore lang preference
+  let savedLang = 'ko';
+  try {
+    savedLang = localStorage.getItem('portfolio-lang') || (navigator.language.startsWith('ko') ? 'ko' : 'en');
+  } catch(e) {}
+  setLang(savedLang);
+
+  // Fade-in observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
